@@ -136,8 +136,9 @@ export function homePage(orders) {
   <table><tr><th>Order</th><th>Item</th><th>Amount</th><th>Status</th></tr>${rows || `<tr><td colspan="4">No orders yet.</td></tr>`}</table>`);
 }
 
-export function vendorOrderPage(o, events) {
+export function vendorOrderPage(o, events, trustSlug) {
   const shipBtn = o.status === "FUNDED" ? `<form method="POST" action="/vendor/${o.id}/ship"><button>Mark as shipped</button></form>` : "";
+  const trustLink = trustSlug ? `<div class="banner">Your public trust page (share in your bio): <a href="/v/${trustSlug}">/v/${trustSlug}</a></div>` : "";
   return layout(`Order ${o.id}`, `
   <h1>${o.id} <span class="pill ${o.status}">${STATE_LABEL[o.status] || o.status}</span></h1>
   <p class="lede">${o.description}</p>
@@ -149,6 +150,7 @@ export function vendorOrderPage(o, events) {
     </div>
     <div class="banner">Buyer link (share on WhatsApp): <a href="/o/${o.id}">${o.id} payment page</a></div>
     ${o.virtual_account_no ? `<div class="banner">Or direct bank transfer: <b>${o.virtual_account_no}</b> · ${o.virtual_bank_name} · dedicated to this order only</div>` : ""}
+    ${trustLink}
     ${shipBtn}
   </div>
   <h2>Audit trail</h2>
