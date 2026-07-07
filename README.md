@@ -102,3 +102,11 @@ POST /webhooks/nomba        Nomba event sink (signed)
 ## Business model
 
 1.5% escrow fee on the vendor payout. Vendors pay for trust because trust converts first-time buyers; every order is two Nomba money movements (collection + payout).
+
+## For reviewers
+
+Live instance: https://maternal-roulette-catty.ngrok-free.dev (dev tunnel, kept online through judging)
+
+To test the full flow: open the link above, create an order on the dashboard (any Nigerian bank details for payout, e.g. bank code 058), open the buyer link, and pay via the Nomba checkout. Payments are real naira on the hackathon production sub account, so use small amounts like N100. The signed payment_success webhook flips the order to FUNDED, marking shipped and confirming delivery triggers the Nomba transfer payout, and every completed escrow updates the vendor's public trust page at /v/{slug}.
+
+To test locally without paying: clone, follow Run it above, then use node scripts/simulate-webhook.js LBX-XXXXXXXX to fire a correctly signed webhook (plus a duplicate and a forged one) at your local server. npm run test:signature self tests the HMAC implementation. Nomba credentials go in .env per .env.example; the hackathon webhook signing key is documented in the hackathon channel.
